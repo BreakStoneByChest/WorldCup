@@ -26,7 +26,7 @@ function logicLayer()
                 else
                     if not jumping then
                         player:getPhysicsBody():setVelocity(cc.p(0, tapV))
-                        --jumping = true
+                        jumping = true
                     --  cc.Director:getInstance():getScheduler():unscheduleScriptEntry(createEnemyFunc)
                     --  land_1:stopAllActions()
                     --  land_2:stopAllActions()
@@ -53,13 +53,19 @@ function logicLayer()
                     cc.Director:getInstance():replaceScene(failedScene.create())
                    sched:unscheduleScriptEntry(createOpponentSchid)
                 end
-               if spriteA:getTag() == tags.tagOfPlayer and spriteB:getTag()== tags.tagOfLayDown then
+                if spriteA:getTag() == tags.tagOfPlayer and spriteB:getTag()== tags.tagOfLayDown then
                     cc.Director:getInstance():replaceScene(failedScene.create())
                     sched:unscheduleScriptEntry(createOpponentSchid)
                 end
+                if spriteA:getTag() == tags.tagOfLand and spriteB:getTag() == tags.tagOfPlayer then
+                    jumping = false;
+                end
+                if spriteA:getTag() == tags.tagOfPlayer and spriteB:getTag() == tags.tagOfLand then
+                    jumping = false;
+                end
                 return true;
             end
-                  listener:registerScriptHandler(oncontact,cc.Handler.EVENT_PHYSICS_CONTACT_BEGIN)
+            listener:registerScriptHandler(oncontact,cc.Handler.EVENT_PHYSICS_CONTACT_BEGIN)
             gameListener = cc.EventListenerTouchOneByOne:create()
             gameListener:registerScriptHandler(onTouchBegan,cc.Handler.EVENT_TOUCH_BEGAN)
             

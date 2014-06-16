@@ -44,7 +44,8 @@ g_resources = {
 tags = {
         tagOfPlayer = 4,
         tagOfStand =5,
-        tagOfLayDown = 6
+        tagOfLayDown = 6,
+        tagOfLand = 7
         }
         
 bitmasks = {

@@ -21,10 +21,12 @@ require"src/GameLogic"
        --  sc:getPhysicsWorld():setDebugDrawMask(cc.PhysicsWorld.DEBUGDRAW_ALL)
         --create EdgeBox        
         local ground = cc.PhysicsBody:createEdgeBox(visibleSize, cc.PHYSICSBODY_MATERIAL_DEFAULT, 3)
-        ground:setDynamic(false)
+--        ground:setDynamic(false)
         local edgeNode = cc.Node:create()
         edgeNode:setPosition(visibleSize.width/2,100 - playerSize / 2 - visibleSize.height/2)
         edgeNode:setPhysicsBody(ground)
+        edgeNode:getPhysicsBody():setContactTestBitmask(1)
+        edgeNode:setTag(tags.tagOfLand)
 
         --edgeNode:getPhysicsBody():setCollisionBitmask(10)
         sc:addChild(edgeNode)
