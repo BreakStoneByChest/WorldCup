@@ -1,4 +1,3 @@
-require"src/GameContants"       
         meter = 0
         --create StatusLayer
         StatusLayer = {}

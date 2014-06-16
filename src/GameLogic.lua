@@ -1,16 +1,54 @@
-require"src/GameContants"
-require"src/PlayerLayer" 
-require"src/OpponentsLayer"
-require"src/StatusLayer"    
-require"src/FailedLayer"
 
-start_button = cc.LabelTTF:create("Tap to Start", "Abduction.ttf", 20)
-start_button:setPosition(cc.p(visibleSize.width/2,visibleSize.height/2))
+
+doubleClicked = false
+firstClicked = false
+doubleClickIntervels = 3
+clickIntervel = 0
+doubleClickCheckSchedulId = -1
 
 function logicLayer()
             local layer = cc.Layer:create()
             layer:addChild(player)
+            
+            --检查逻辑
+            local function clickLogic()
+            
+                if not firstClicked then
+                	firstClicked = true
+                else
+                    doubleClicked = true
+                 end
+            end
+            
+            --双击检查
+            local function doubleClickCheck()
+                clickIntervel = clickIntervel + 1
+                if clickIntervel <= doubleClickIntervels and doubleClicked then
+                    cclog("shuangji")
+                    --执行双击的动作
+                    player:getPhysicsBody():setVelocity(cc.p(0, tapV*1.2))
+                     jumping = true
+                    --重置
+                    doubleClicked = false
+                    firstClicked = false
+                    clickIntervel=0
+                elseif clickIntervel == doubleClickIntervels and firstClicked then
+                    cclog("danji")
+                    --执行单击动作
+                     player:getPhysicsBody():setVelocity(cc.p(0, tapV))
+                     jumping = true
+                    --重置
+                    doubleClicked = false
+                    firstClicked = false
+                    clickIntervel=0
+                elseif clickIntervel >= doubleClickIntervels then
+                    clickIntervel=0
+                end
+            end
+            
+           doubleClickCheckSchedulId = sched:scheduleScriptFunc(doubleClickCheck,0.2,false)
             local function onTouchBegan()
+
                 if not ready then
                     ready = true
                     start_button:runAction(cc.FadeOut:create(0.1))
@@ -25,8 +63,10 @@ function logicLayer()
                     layer:scheduleUpdateWithPriorityLua(step,0)
                 else
                     if not jumping then
-                        player:getPhysicsBody():setVelocity(cc.p(0, tapV))
-                        jumping = true
+                        clickLogic()
+
+                       -- player:getPhysicsBody():setVelocity(cc.p(0, tapV))
+                        --jumping = true
                     --  cc.Director:getInstance():getScheduler():unscheduleScriptEntry(createEnemyFunc)
                     --  land_1:stopAllActions()
                     --  land_2:stopAllActions()
@@ -47,22 +87,25 @@ function logicLayer()
             
                 if spriteA:getTag() == tags.tagOfStand and spriteB:getTag()== tags.tagOfPlayer then
                     cc.Director:getInstance():replaceScene(failedScene.create())
+                    
                     sched:unscheduleScriptEntry(createOpponentSchid)
                 end
                 if spriteA:getTag() == tags.tagOfLayDown and spriteB:getTag()== tags.tagOfPlayer then
                     cc.Director:getInstance():replaceScene(failedScene.create())
                    sched:unscheduleScriptEntry(createOpponentSchid)
                 end
-                if spriteA:getTag() == tags.tagOfPlayer and spriteB:getTag()== tags.tagOfLayDown then
+               if spriteA:getTag() == tags.tagOfPlayer and spriteB:getTag()== tags.tagOfLayDown then
                     cc.Director:getInstance():replaceScene(failedScene.create())
                     sched:unscheduleScriptEntry(createOpponentSchid)
                 end
+                
                 if spriteA:getTag() == tags.tagOfLand and spriteB:getTag() == tags.tagOfPlayer then
                     jumping = false;
                 end
                 if spriteA:getTag() == tags.tagOfPlayer and spriteB:getTag() == tags.tagOfLand then
                     jumping = false;
                 end
+                
                 return true;
             end
             listener:registerScriptHandler(oncontact,cc.Handler.EVENT_PHYSICS_CONTACT_BEGIN)

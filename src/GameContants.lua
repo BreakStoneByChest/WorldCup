@@ -1,9 +1,8 @@
-require "Cocos2d"
-require "Cocos2dConstants"
 
 visibleSize = cc.Director:getInstance():getVisibleSize()
 origin = cc.Director:getInstance():getVisibleOrigin()
 sched = cc.Director:getInstance():getScheduler()
+
 minDuration = 2.0
 maxDuration = 4.0
 bgSize = 7654
@@ -13,7 +12,7 @@ jumping = false
 background_speed = 10
 enemy_speed = 5
 createEnemyFunc = 0
-tapV = 270
+tapV = 310
 systemGravity = -900
 runningAction = 0
 player = 0
@@ -21,7 +20,7 @@ enemies = 0
 enemy = {}
 bodyScale = 0.7
 createOpponentSchid = -1
-
+       
 res = {
     helloBG_png = "helloBG.png",
     start_n_png = "start_n.png",

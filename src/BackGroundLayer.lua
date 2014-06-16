@@ -1,6 +1,7 @@
- require"src/GameContants"
  --create BackgroundLayer
-    function BackgroundLayer()
+BackgroundLayer = BackgroundLayer or {}
+
+    function BackgroundLayer.create()
         local layerBg = cc.Layer:create()
         local bg = cc.Sprite:create(res.PlayBG_png)
         bg:setPosition(cc.p(bgSize / 2 - visibleSize.width * 2, visibleSize.height / 2))
@@ -25,3 +26,5 @@
 
         return layerBg, land_1, land_2
     end
+
+    return BackgroundLayer

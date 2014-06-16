@@ -1,5 +1,13 @@
+require "Cocos2d"
+require "Cocos2dConstants"
 require"src/GameContants"
+require"src/StatusLayer"    
+require"src/BackGroundLayer"
+require"src/OpponentsLayer"
+require"src/GameLogic"
+require"src/PlayerLayer"
 require"src/PlayerScene"
+require"src/FailedLayer"
 
 
 -- cclog
@@ -57,7 +65,7 @@ local function main()
     cc.SimpleAudioEngine:getInstance():preloadEffect(effectPath)
 
     -- run
-    local sceneGame = createPlayerScene()
+    local sceneGame = PlayerScene.create()
     if cc.Director:getInstance():getRunningScene() then
         cc.Director:getInstance():replaceScene(sceneGame)
     else
