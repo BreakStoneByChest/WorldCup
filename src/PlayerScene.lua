@@ -17,10 +17,13 @@ PlayerScene = PlayerScene or {}
         sc:getPhysicsWorld():setDebugDrawMask(cc.PhysicsWorld.DEBUGDRAW_ALL)
        --  sc:getPhysicsWorld():setDebugDrawMask(cc.PhysicsWorld.DEBUGDRAW_ALL)
         --create EdgeBox        
-        local ground = cc.PhysicsBody:createEdgeBox(visibleSize, cc.PHYSICSBODY_MATERIAL_DEFAULT, 3)
+        local ground = cc.PhysicsBody:createEdgeBox(cc.size(visibleSize.width,visibleSize.height/4), cc.PHYSICSBODY_MATERIAL_DEFAULT, 7)
         ground:setDynamic(false)
         local edgeNode = cc.Node:create()
-        edgeNode:setPosition(visibleSize.width/2,100 - playerSize / 2 - visibleSize.height/2)
+        edgeNode:setPosition(visibleSize.width/2, visibleSize.height/8)
+        ground:getShape(0):setRestitution(0);
+        ground:getShape(0):setFriction(0);
+        
         edgeNode:setPhysicsBody(ground)
         edgeNode:getPhysicsBody():setContactTestBitmask(1)
         edgeNode:setTag(tags.tagOfLand)
