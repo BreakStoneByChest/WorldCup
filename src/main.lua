@@ -1,6 +1,6 @@
 require "Cocos2d"
 require "Cocos2dConstants"
-require"src/GameContants"
+require"src/GameConstants"
 require"src/StatusLayer"    
 require"src/BackGroundLayer"
 require"src/OpponentsLayer"
