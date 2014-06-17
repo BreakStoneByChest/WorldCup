@@ -2,9 +2,33 @@
 
 doubleClicked = false
 firstClicked = false
-doubleClickIntervels = 3
+doubleClickIntervels = 0.2
 clickIntervel = 0
 doubleClickCheckSchedulId = -1
+guorenIntervel = 0.5
+local function oneClick()
+      if  not jumping then
+         player:getPhysicsBody():setVelocity(cc.p(0, tapV*1.2))
+         jumping = true
+     end
+     --重置
+     doubleClicked = false
+     firstClicked = false
+end
+local function doubleClick()
+    
+    if  not jumping then
+         player:getPhysicsBody():setEnable(false);--setVelocity(cc.p(0, tapV))
+         local doclick = cc.Sequence:create(cc.DelayTime:create(guorenIntervel),cc.CallFunc:create(function() player:getPhysicsBody():setEnable(true) end))
+         player:runAction(doclick)
+         
+     end
+    
+    
+     --重置
+     doubleClicked = false
+     firstClicked = false
+end
 
 function logicLayer()
             local layer = cc.Layer:create()
@@ -12,42 +36,24 @@ function logicLayer()
             
             --检查逻辑
             local function clickLogic()
-            
+                            
                 if not firstClicked then
+--                    clickIntervel = 0
+                    cclog("danji")
                 	firstClicked = true
-                else
-                    doubleClicked = true
+                	local doclick = cc.Sequence:create(cc.DelayTime:create(doubleClickIntervels),cc.CallFunc:create(oneClick))
+                    doclick:setTag(tags.tagOfOneClick)
+                    player:runAction(doclick)
+                elseif not doubleClicked then
+                    firstClicked = false
+                    cclog("shuangji")
+                    player:stopActionByTag(tags.tagOfOneClick)
+                    doubleClick()
+                    --doubleClicked = true
                  end
             end
             
-            --双击检查
-            local function doubleClickCheck()
-                clickIntervel = clickIntervel + 1
-                if clickIntervel <= doubleClickIntervels and doubleClicked then
-                    cclog("shuangji")
-                    --执行双击的动作
-                    player:getPhysicsBody():setVelocity(cc.p(0, tapV*1.2))
-                     jumping = true
-                    --重置
-                    doubleClicked = false
-                    firstClicked = false
-                    clickIntervel=0
-                elseif clickIntervel == doubleClickIntervels and firstClicked then
-                    cclog("danji")
-                    --执行单击动作
-                     player:getPhysicsBody():setVelocity(cc.p(0, tapV))
-                     jumping = true
-                    --重置
-                    doubleClicked = false
-                    firstClicked = false
-                    clickIntervel=0
-                elseif clickIntervel >= doubleClickIntervels then
-                    clickIntervel=0
-                end
-            end
-            
-           doubleClickCheckSchedulId = sched:scheduleScriptFunc(doubleClickCheck,0.2,false)
-            local function onTouchBegan()
+            local function onTouchBegan(keyCode, event)--)
 
                 if not ready then
                     ready = true
@@ -64,12 +70,6 @@ function logicLayer()
                 else
                     if not jumping then
                         clickLogic()
-
-                       -- player:getPhysicsBody():setVelocity(cc.p(0, tapV))
-                        --jumping = true
-                    --  cc.Director:getInstance():getScheduler():unscheduleScriptEntry(createEnemyFunc)
-                    --  land_1:stopAllActions()
-                    --  land_2:stopAllActions()
                     end
                 end
             end
@@ -82,19 +82,23 @@ function logicLayer()
                 if spriteA:getTag() == tags.tagOfPlayer and spriteB:getTag()== tags.tagOfStand then
                     cc.Director:getInstance():replaceScene(failedScene.create())
                     sched:unscheduleScriptEntry(createOpponentSchid)
+                    meter = 0
+                   -- sched:unscheduleScriptEntry(doubleClickCheckSchedulId)
                     cclog("test1")
                 end
             
                 if spriteA:getTag() == tags.tagOfStand and spriteB:getTag()== tags.tagOfPlayer then
                     cc.Director:getInstance():replaceScene(failedScene.create())
-                    
+                    meter = 0
                     sched:unscheduleScriptEntry(createOpponentSchid)
                 end
                 if spriteA:getTag() == tags.tagOfLayDown and spriteB:getTag()== tags.tagOfPlayer then
+                    meter = 0
                     cc.Director:getInstance():replaceScene(failedScene.create())
                    sched:unscheduleScriptEntry(createOpponentSchid)
                 end
                if spriteA:getTag() == tags.tagOfPlayer and spriteB:getTag()== tags.tagOfLayDown then
+                    meter = 0
                     cc.Director:getInstance():replaceScene(failedScene.create())
                     sched:unscheduleScriptEntry(createOpponentSchid)
                 end
@@ -111,8 +115,10 @@ function logicLayer()
             listener:registerScriptHandler(oncontact,cc.Handler.EVENT_PHYSICS_CONTACT_BEGIN)
             gameListener = cc.EventListenerTouchOneByOne:create()
             gameListener:registerScriptHandler(onTouchBegan,cc.Handler.EVENT_TOUCH_BEGAN)
-            
-            layer:getEventDispatcher():addEventListenerWithSceneGraphPriority(gameListener, layer)
+            local zhijian = cc.EventListenerKeyboard:create()
+            zhijian:registerScriptHandler(onTouchBegan,cc.Handler.EVENT_KEYBOARD_PRESSED)
+           layer:getEventDispatcher():addEventListenerWithSceneGraphPriority(gameListener, layer)
+           layer:getEventDispatcher():addEventListenerWithSceneGraphPriority(zhijian, layer)
             layer:getEventDispatcher():addEventListenerWithSceneGraphPriority(listener, layer)
             return layer;
         end                 

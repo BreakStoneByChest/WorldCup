@@ -1,13 +1,13 @@
 require "Cocos2d"
 require "Cocos2dConstants"
-require "src/GameConstants"
-require "src/StatusLayer"    
-require "src/BackGroundLayer"
-require "src/OpponentsLayer"
-require "src/GameLogic"
-require "src/PlayerLayer"
-require "src/PlayerScene"
-require "src/FailedLayer"
+require"src/GameContants"
+require"src/StatusLayer"    
+require"src/BackGroundLayer"
+require"src/OpponentsLayer"
+require"src/GameLogic"
+require"src/PlayerLayer"
+require"src/PlayerScene"
+require"src/FailedLayer"
 
 
 -- cclog

@@ -11,9 +11,9 @@
             --            StatusLayer.labelCoin:setColor(cc.c3b(0,0,0))
 
             StatusLayer.labelCoin:setPosition(cc.p(70, visibleSize.height - 20))
-            layer:addChild(StatusLayer.labelCoin)
+            --layer:addChild(StatusLayer.labelCoin)
 
-            StatusLayer.labelMeter = cc.LabelTTF:create("0M", "Abduction.ttf", 20)
+            StatusLayer.labelMeter = cc.LabelTTF:create("Meters:0", "Abduction.ttf", 20)
             StatusLayer.labelMeter:setPosition(cc.p(visibleSize.width - 70, visibleSize.height - 20))
             layer:addChild(StatusLayer.labelMeter)
 
@@ -26,7 +26,7 @@
        
         end
         function StatusLayer.setMeter(num)
-         local str = string.format("Coins:%d",num)
+         local str = string.format("Meters:%d",num)
          StatusLayer.labelMeter:setString(str)
         end
         
