@@ -54,7 +54,7 @@ bitmasks = {
         bitmaskOfLayDown =3
     } 
 
-        --²úÉúËæ»úÊý
+        --ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 function createRandomNum(min,max)
         local minNum = min
         local maxNum = max
