@@ -3,7 +3,8 @@ PlayerScene = PlayerScene or {}
  function  PlayerScene.create()
         start_button = cc.LabelTTF:create("Tap to Start", "Abduction.ttf", 20)
         start_button:setPosition(cc.p(visibleSize.width/2,visibleSize.height/2))
-        layerBg, land_1, land_2 = BackgroundLayer.create()
+        start_button:setColor(cc.c3b(0,0,0))
+        layerBg = BackgroundLayer.create()
 
         
         player = CreatePlayer()
@@ -17,10 +18,10 @@ PlayerScene = PlayerScene or {}
         sc:getPhysicsWorld():setDebugDrawMask(cc.PhysicsWorld.DEBUGDRAW_ALL)
        --  sc:getPhysicsWorld():setDebugDrawMask(cc.PhysicsWorld.DEBUGDRAW_ALL)
         --create EdgeBox        
-        local ground = cc.PhysicsBody:createEdgeBox(cc.size(visibleSize.width,visibleSize.height/4), cc.PHYSICSBODY_MATERIAL_DEFAULT, 7)
+        local ground = cc.PhysicsBody:createEdgeBox(cc.size(visibleSize.width * 3,visibleSize.height/4), cc.PHYSICSBODY_MATERIAL_DEFAULT, 7)
         ground:setDynamic(false)
         local edgeNode = cc.Node:create()
-        edgeNode:setPosition(visibleSize.width/2, visibleSize.height/8)
+        edgeNode:setPosition(visibleSize.width / 2, visibleSize.height/8)
         ground:getShape(0):setRestitution(0);
         ground:getShape(0):setFriction(0);
         

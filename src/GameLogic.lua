@@ -6,11 +6,19 @@ doubleClickIntervels = 0.2
 clickIntervel = 0
 doubleClickCheckSchedulId = -1
 guorenIntervel = 0.5
+
 local function oneClick()
-      if  not jumping then
-         player:getPhysicsBody():setVelocity(cc.p(0, tapV*1.2))
-         jumping = true
-     end
+    if  not jumping then
+        jumpAction = cc.RepeatForever:create(cc.Animate:create(CreateJumpAnimation()))
+           jumpAction:setTag(tags.tagOfJump)
+       -- local delayTime = cc.DelayTime:create(2)
+        --local animation2 = CreateAnimation()
+        --local runningAction = cc.RepeatForever:create(cc.Animate:create(animation2))
+        player:stopActionByTag(tags.tagOfRun)
+        player:runAction(jumpAction)
+        player:getPhysicsBody():setVelocity(cc.p(0, tapV*1.2))
+        jumping = true
+    end
      --ÖØÖÃ
      doubleClicked = false
      firstClicked = false
@@ -31,6 +39,7 @@ local function doubleClick()
 end
 
 function logicLayer()
+
             local layer = cc.Layer:create()
             layer:addChild(player)
             
@@ -63,8 +72,12 @@ function logicLayer()
 --                    local enemy = CreateEnemy(layer)
                     layer = CreateOpponents(layer)
                     local function step(delt)
-                         meter  = meter + delt
-                         StatusLayer.setMeter(meter)
+                        meter  = meter + delt
+                        StatusLayer.setMeter(meter)
+                        if meter < 100 then
+                            minDuration = 3 + 2 * (100 - meter) / 100
+                            maxDuration = 3 + 2.5 * (100 - meter) / 100
+                        end
                     end
                     layer:scheduleUpdateWithPriorityLua(step,0)
                 else
@@ -104,9 +117,21 @@ function logicLayer()
                 end
                 
                 if spriteA:getTag() == tags.tagOfLand and spriteB:getTag() == tags.tagOfPlayer then
+                      player:stopActionByTag(tags.tagOfRun)
+                     runAction = cc.RepeatForever:create(cc.Animate:create(CreatePlayerAnimation()))
+                     runAction:setTag(tags.tagOfRun)
+                    player:stopActionByTag(tags.tagOfJump) 
+                   player:runAction(runAction)
+                   cclog("33333333333333333")
                     jumping = false;
                 end
                 if spriteA:getTag() == tags.tagOfPlayer and spriteB:getTag() == tags.tagOfLand then
+                      player:stopActionByTag(tags.tagOfRun)
+                     runAction = cc.RepeatForever:create(cc.Animate:create(CreatePlayerAnimation()))
+                     runAction:setTag(tags.tagOfRun)
+                     player:stopActionByTag(tags.tagOfJump)
+                     cclog("222222222222222")
+                   player:runAction(runAction)
                     jumping = false;
                 end
                 
@@ -117,8 +142,8 @@ function logicLayer()
             gameListener:registerScriptHandler(onTouchBegan,cc.Handler.EVENT_TOUCH_BEGAN)
             local zhijian = cc.EventListenerKeyboard:create()
             zhijian:registerScriptHandler(onTouchBegan,cc.Handler.EVENT_KEYBOARD_PRESSED)
-           layer:getEventDispatcher():addEventListenerWithSceneGraphPriority(gameListener, layer)
-           layer:getEventDispatcher():addEventListenerWithSceneGraphPriority(zhijian, layer)
+            layer:getEventDispatcher():addEventListenerWithSceneGraphPriority(gameListener, layer)
+            layer:getEventDispatcher():addEventListenerWithSceneGraphPriority(zhijian, layer)
             layer:getEventDispatcher():addEventListenerWithSceneGraphPriority(listener, layer)
             return layer;
         end                 

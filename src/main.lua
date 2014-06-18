@@ -1,6 +1,6 @@
 require "Cocos2d"
 require "Cocos2dConstants"
-require"src/GameContants"
+require"src/GameConstants"
 require"src/StatusLayer"    
 require"src/BackGroundLayer"
 require"src/OpponentsLayer"
@@ -8,7 +8,7 @@ require"src/GameLogic"
 require"src/PlayerLayer"
 require"src/PlayerScene"
 require"src/FailedLayer"
-
+require"src/Animation"
 
 -- cclog
 cclog = function(...)
@@ -27,6 +27,8 @@ local gameListener = nil
 local landListener = nil
 
 local function main()
+          
+            
     collectgarbage("collect")
     -- avoid memory leak
     collectgarbage("setpause", 100)
@@ -66,6 +68,7 @@ local function main()
 
     -- run
     local sceneGame = PlayerScene.create()
+
     if cc.Director:getInstance():getRunningScene() then
         cc.Director:getInstance():replaceScene(sceneGame)
     else
