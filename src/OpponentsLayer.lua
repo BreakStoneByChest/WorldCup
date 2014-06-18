@@ -8,15 +8,15 @@ function CreateOpponents(layer)
     local function initOpponent()
     	for i = 1,OpponentCount do
     	    opponents.stand[i] = nil
-            local animation = CreateAnimation()
+            local animation = CreatePlayerAnimation()
             runningAction = cc.RepeatForever:create(cc.Animate:create(animation))
             local opponentStand = cc.Sprite:createWithSpriteFrameName("runner0.png")
             opponentStand:setScaleX(-1)
             opponentStand:setColor(cc.c3b(255,255,0))
             local body = cc.PhysicsBody:createBox(cc.size(opponentStand:getContentSize().width*0.25,opponentStand:getContentSize().height*0.5))
-            body:getShape(0):setCategoryBitmask(2 ^ (i - 1))
-            body:getShape(0):setCollisionBitmask(2 ^ (i - 1))
-            body:getShape(0):setContactTestBitmask(2 ^ (i - 1))
+            body:getShape(0):setCategoryBitmask(1)
+            body:getShape(0):setCollisionBitmask(math.pow(2,i))
+            body:getShape(0):setContactTestBitmask(math.pow(2,i))
             --body:getShape(0):setGroup(8)
             cclog("opponentStand  bitmask is %d ",body:getShape(0):getContactTestBitmask())
             body:setGravityEnable(true)
@@ -31,21 +31,22 @@ function CreateOpponents(layer)
     	
         for i = 1,OpponentCount do
             opponents.laydown[i] = nil
-            local animation = CreateAnimation()
-            runningAction = cc.RepeatForever:create(cc.Animate:create(animation))
-            local opponentLayDown = cc.Sprite:createWithSpriteFrameName("runner0.png")
-            opponentLayDown:setScaleX(-1)
-            local body = cc.PhysicsBody:createBox(cc.size(opponentLayDown:getContentSize().width*0.25,opponentLayDown:getContentSize().height*0.5))
-            body:getShape(0):setCategoryBitmask(2 ^ (i + 4))
-            body:getShape(0):setCollisionBitmask(2 ^ (i + 4))
-            body:getShape(0):setContactTestBitmask(2 ^ (i + 4))
+            local animation = CreateOpponent1Animation()
+--            runningAction = cc.RepeatForever:create(cc.Animate:create(animation))
+            local opponentLayDown = cc.Sprite:createWithSpriteFrameName("opp1.png")
+            local body = cc.PhysicsBody:createBox(cc.size(opponentLayDown:getContentSize().width*0.75,opponentLayDown:getContentSize().height*0.25))
+            body:getShape(0):setCategoryBitmask(1)
+            body:getShape(0):setCollisionBitmask(math.pow(2,i + OpponentCount))
+            body:getShape(0):setContactTestBitmask(math.pow(2,i + OpponentCount))
+            body:setPositionOffset(cc.p(0,-opponentLayDown:getContentSize().height*0.125))
             --body:getShape(0):setGroup(8)
             cclog("opponentLayDown bitmask is %d",body:getShape(0):getContactTestBitmask())
             body:setGravityEnable(true)
             opponentLayDown:setPhysicsBody(body)
             opponentLayDown:setTag(tags.tagOfLayDown)
             opponentLayDown:getPhysicsBody():setEnable(true)
-            opponentLayDown:runAction(runningAction)
+--            runningAction:setTag(tags.tagOfRun)
+--            opponentLayDown:runAction(runningAction)
             opponentLayDown:setPosition(visibleSize.width + 100,visibleSize.height/4+opponentLayDown:getContentSize().height/4)
             opponents.laydown[i] = opponentLayDown
             layer:addChild(opponents.laydown[i])
@@ -59,6 +60,12 @@ function CreateOpponents(layer)
             if type == "L" then
                 if opponents.laydown[i]:getPositionX() < -50 or opponents.laydown[i]:getPositionX() == visibleSize.width + 100 then
 --                    opponents.laydown[i]:getPhysicsBody():setEnable(false)
+
+                    opponents.laydown[i]:stopActionByTag(tags.tagOfLayDown)
+                    local animation = CreateOpponent1Animation()
+                    runningAction = cc.RepeatForever:create(cc.Animate:create(animation))
+                    runningAction:setTag(tags.tagOfRun)
+                    opponents.laydown[i]:runAction(runningAction)
                     return opponents.laydown[i]
                 end
             elseif type == "S" then
@@ -75,18 +82,30 @@ function CreateOpponents(layer)
         cclog("stand")
         local opponentStand = character
         opponentStand:getPhysicsBody():setEnable(true)
-        opponentStand:setPosition(visibleSize.width,visibleSize.height/4+opponentStand:getContentSize().height/4)
+        opponentStand:setPosition(visibleSize.width + 100,visibleSize.height/4+opponentStand:getContentSize().height/4)
         opponentStand:runAction(cc.MoveTo:create(actionDuration,cc.p(-100,visibleSize.height/4+opponentStand:getContentSize().height/4)))
-
+    
     end
 
     local function createOpponentLaydown(character, actionDuration)
         cclog("Laydown")
         local opponentLaydown = character
         opponentLaydown:getPhysicsBody():setEnable(true)
-        opponentLaydown:setPosition(visibleSize.width,visibleSize.height/4+opponentLaydown:getContentSize().height/4)
-        opponentLaydown:runAction(cc.MoveTo:create(actionDuration,cc.p(-100,visibleSize.height/4+opponentLaydown:getContentSize().height/4)))
-
+        opponentLaydown:setPosition(visibleSize.width + 100,visibleSize.height/4+opponentLaydown:getContentSize().height/4)
+        local function moveToMiddle()
+            opponentLaydown:runAction(cc.MoveTo:create(actionDuration/2,cc.p(visibleSize.width / 2,visibleSize.height/4+opponentLaydown:getContentSize().height/4)))
+        end
+        local function moveToLeft()
+            opponentLaydown:stopActionByTag(tags.tagOfRun)
+            LayDownAction = cc.RepeatForever:create(cc.Animate:create(CreateLayDownAnimation()))
+            LayDownAction:setTag(tags.tagOfLayDown)
+            opponentLaydown:runAction(LayDownAction)
+            opponentLaydown:runAction(cc.MoveTo:create(actionDuration/3,cc.p(-100,visibleSize.height/4+opponentLaydown:getContentSize().height/4)))
+        end
+        local moveToMiddle = cc.CallFunc:create(moveToMiddle)
+        local delay = cc.DelayTime:create(actionDuration/2)
+        local moveToLeft = cc.CallFunc:create(moveToLeft)
+        opponentLaydown:runAction(cc.Sequence:create(moveToMiddle,delay,moveToLeft,delay))
     end
 
     

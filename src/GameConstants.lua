@@ -7,8 +7,8 @@ winSize = cc.Director:getInstance():getWinSize()
 runningAction = 0
 
 opponentDelay = 3   --产生opponent的间隔
-minDuration = 3.0   --opponent横穿屏幕的最小时间
-maxDuration = 5.0
+minDuration = 5.0   --opponent初始横穿屏幕的最小时间
+maxDuration = 6.0
 bgWidth = 4252
 bgHeight = 1134
 playerSize = 62
@@ -29,20 +29,12 @@ res = {
     PlayBG_png="PlayBG.png",
     runner_png =  "runner.png",
     runner_plist = "runner.plist",
+    opponent1_plist = "opponent.plist",
     background_png = "background.png",
     sea_png = "sea.png",
     cloud_png = "cloud.png",
     beach_png = "beach.png",
     background_list = "background.plist"
-}
-
---有啥用吗？ by 刘益
-g_resources = {
-    --image
-    res.helloBG_png,
-    res.PlayBG_png,
-    res.runner_png,
-    res.runner_plist
     
 }
 

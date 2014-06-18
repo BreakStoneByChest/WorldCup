@@ -8,7 +8,7 @@ require"src/GameLogic"
 require"src/PlayerLayer"
 require"src/PlayerScene"
 require"src/FailedLayer"
-
+require"src/Animation"
 
 -- cclog
 cclog = function(...)

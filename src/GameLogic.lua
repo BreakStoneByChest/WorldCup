@@ -9,8 +9,7 @@ guorenIntervel = 0.5
 
 local function oneClick()
     if  not jumping then
---    √ª”√
-         jumpAction = cc.RepeatForever:create(cc.Animate:create(CreateJump()))
+        jumpAction = cc.RepeatForever:create(cc.Animate:create(CreateJumpAnimation()))
            jumpAction:setTag(tags.tagOfJump)
        -- local delayTime = cc.DelayTime:create(2)
         --local animation2 = CreateAnimation()
@@ -73,8 +72,12 @@ function logicLayer()
 --                    local enemy = CreateEnemy(layer)
                     layer = CreateOpponents(layer)
                     local function step(delt)
-                         meter  = meter + delt
-                         StatusLayer.setMeter(meter)
+                        meter  = meter + delt
+                        StatusLayer.setMeter(meter)
+                        if meter < 100 then
+                            minDuration = 3 + 2 * (100 - meter) / 100
+                            maxDuration = 3 + 2.5 * (100 - meter) / 100
+                        end
                     end
                     layer:scheduleUpdateWithPriorityLua(step,0)
                 else
@@ -115,7 +118,7 @@ function logicLayer()
                 
                 if spriteA:getTag() == tags.tagOfLand and spriteB:getTag() == tags.tagOfPlayer then
                       player:stopActionByTag(tags.tagOfRun)
-                     runAction = cc.RepeatForever:create(cc.Animate:create(CreateAnimation()))
+                     runAction = cc.RepeatForever:create(cc.Animate:create(CreatePlayerAnimation()))
                      runAction:setTag(tags.tagOfRun)
                     player:stopActionByTag(tags.tagOfJump) 
                    player:runAction(runAction)
@@ -124,7 +127,7 @@ function logicLayer()
                 end
                 if spriteA:getTag() == tags.tagOfPlayer and spriteB:getTag() == tags.tagOfLand then
                       player:stopActionByTag(tags.tagOfRun)
-                     runAction = cc.RepeatForever:create(cc.Animate:create(CreateAnimation()))
+                     runAction = cc.RepeatForever:create(cc.Animate:create(CreatePlayerAnimation()))
                      runAction:setTag(tags.tagOfRun)
                      player:stopActionByTag(tags.tagOfJump)
                      cclog("222222222222222")
