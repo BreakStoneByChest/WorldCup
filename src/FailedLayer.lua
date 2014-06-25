@@ -15,14 +15,35 @@ failedScene = failedScene or {}
     end
      
     function failedScene.create()
+    
+        local sprite_gameover = cc.Sprite:createWithSpriteFrameName(res.gameover_png)
+        sprite_gameover:setPosition(visibleSize.width/2, visibleSize.height/2)
+        sprite_gameover:setScale(winSize.height / sprite_gameover:getContentSize().height)
         local failedSc = cc.Scene:create()
         local failedLayer = cc.Layer:create()
-        local str = string.format("Final!   %d meter",meter)
-        local label = cc.LabelTTF:create(str, "Abduction.ttf", 20)
+        failedLayer:addChild(sprite_gameover)
+        
+        local score =  cc.UserDefault:getInstance():getDoubleForKey("highestScore")
+        local say = nil
+        if score == nil or score <= meter then
+        	say = string.format("new highest score :%0.3f",meter)
+        	cc.UserDefault:getInstance():setDoubleForKey("highestScore",meter)
+        else
+            
+            say = string.format("Final!   %0.3f meter,highest score %0.3f",meter,score)
+        end
+        
+      --  local highScore = cc.LabelTTF:create(str, "Abduction.ttf", 20)
+        
+        
+        --local str = string.format("Final!   %d meter",meter)
+        local label = cc.LabelTTF:create(say, "Abduction.ttf", 20)
+        label:setColor(cc.c3b(0,0,0))
         label:setPosition( cc.p(visibleSize.width/2, visibleSize.height/2+40) )
         failedLayer:addChild(label)
         local label2 = cc.LabelTTF:create("Tap to Restart", "Abduction.ttf", 20)
         label2:setPosition( cc.p(visibleSize.width/2, visibleSize.height/2) )
+        label2:setColor(cc.c3b(0,0,0))
         failedLayer:addChild(label2)
         --exit button
         local function menuCallback()
@@ -34,6 +55,7 @@ failedScene = failedScene or {}
 --        failedLayer:addChild(closeItem)
 
         local exitLabel = cc.LabelTTF:create("Press to Exit", "Abduction.ttf", 20)
+        exitLabel:setColor(cc.c3b(0,0,0))
         local  exitItem = cc.MenuItemLabel:create(exitLabel)
         exitItem:registerScriptTapHandler(menuCallback)
         local menu = cc.Menu:create()

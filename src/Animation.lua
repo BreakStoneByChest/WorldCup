@@ -9,7 +9,7 @@ function CreatePlayerAnimation()
         animation:addSpriteFrame(frame)
         --   cclog(frame)
     end
-    animation:setDelayPerUnit(1.0 / 8.0)
+    animation:setDelayPerUnit(1.0 /10.0)
     animation:setRestoreOriginalFrame(true)
     return animation
 end
@@ -36,7 +36,7 @@ function CreateOpponent1Animation()
         animation:addSpriteFrame(frame)
         --   cclog(frame)
     end
-    animation:setDelayPerUnit(1.0 / 8.0)
+    animation:setDelayPerUnit(1.0 /10.0)
     animation:setRestoreOriginalFrame(true)
     return animation
 end

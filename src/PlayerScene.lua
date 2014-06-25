@@ -14,8 +14,8 @@ PlayerScene = PlayerScene or {}
         
 
         local sc = cc.Scene:createWithPhysics()
-        sc:getPhysicsWorld():setGravity(cc.p(0, systemGravity))
-        sc:getPhysicsWorld():setDebugDrawMask(cc.PhysicsWorld.DEBUGDRAW_ALL)
+        sc:getPhysicsWorld():setGravity(cc.p(0, systemGravity*0.7))
+       sc:getPhysicsWorld():setDebugDrawMask(cc.PhysicsWorld.DEBUGDRAW_ALL)
        --  sc:getPhysicsWorld():setDebugDrawMask(cc.PhysicsWorld.DEBUGDRAW_ALL)
         --create EdgeBox        
         local ground = cc.PhysicsBody:createEdgeBox(cc.size(visibleSize.width * 3,visibleSize.height/4), cc.PHYSICSBODY_MATERIAL_DEFAULT, 7)

@@ -9,15 +9,15 @@ runningAction = 0
 opponentDelay = 3   --产生opponent的间隔
 minDuration = 5.0   --opponent初始横穿屏幕的最小时间
 maxDuration = 6.0
-bgWidth = 4252
-bgHeight = 1134
+bgWidth = 1023
+bgHeight = 273
 playerSize = 62
 ready = false    
 jumping = false
-background_speed = bgWidth/100
+background_speed = bgWidth/70
 enemy_speed = 5
 createEnemyFunc = 0
-tapV = 360
+tapV = 300
 systemGravity = -900
 player = 0
 
@@ -26,16 +26,18 @@ createOpponentSchid = -1
        
 res = {
     helloBG_png = "helloBG.png",
+    gameover_png = "gameover.png",
+    
     PlayBG_png="PlayBG.png",
     runner_png =  "runner.png",
     runner_plist = "runner.plist",
     opponent1_plist = "opponent.plist",
-    background_png = "background.png",
-    sea_png = "sea.png",
-    cloud_png = "cloud.png",
-    beach_png = "beach.png",
-    background_list = "background.plist"
-    
+    background_png = "bg0.png",
+    sea_png = "bg2.png",
+    cloud_png = "bg3.png",
+    beach_png = "bg1.png",
+    sky_png = "bg4.png",
+    background_list = "bg0.plist"
 }
 
 tags = {

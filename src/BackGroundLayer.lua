@@ -56,13 +56,18 @@ BackgroundLayer = BackgroundLayer or {}
         sprite_beach2:runAction(cc.RepeatForever:create(cc.Sequence:create(movecbeach2, reset2)))
         cclog("ddddd"..background_speed)
 
-        spritebatch:addChild(sprite_cloud)
-        spritebatch:addChild(sprite_sea)
-        spritebatch:addChild(sprite_beach)
-        spritebatch:addChild(sprite_cloud2)
-        spritebatch:addChild(sprite_sea2)
-        spritebatch:addChild(sprite_beach2)
-        local layerBg = cc.LayerColor:create( cc.c4b(255, 255, 255, 255), visibleSize.width, visibleSize.height)
+        local sprite_sky = cc.Sprite:createWithSpriteFrameName(res.sky_png)
+        sprite_sky:setPosition( position1 )
+        sprite_sky:setScale(scaleFactor)
+        
+        spritebatch:addChild(sprite_sky, -200)
+        spritebatch:addChild(sprite_cloud, -100)
+        spritebatch:addChild(sprite_sea, -50)
+        spritebatch:addChild(sprite_beach, 0)
+        spritebatch:addChild(sprite_cloud2, -100)
+        spritebatch:addChild(sprite_sea2, -50)
+        spritebatch:addChild(sprite_beach2, 0)
+        local layerBg = cc.Layer:create()
         layerBg:addChild(spritebatch)
         
         return layerBg

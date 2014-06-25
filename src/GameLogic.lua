@@ -2,10 +2,10 @@
 
 doubleClicked = false
 firstClicked = false
-doubleClickIntervels = 0.2
+doubleClickIntervels = 0.3
 clickIntervel = 0
 doubleClickCheckSchedulId = -1
-guorenIntervel = 0.5
+guorenIntervel = 0.8
 
 local function oneClick()
     if  not jumping then
@@ -16,7 +16,7 @@ local function oneClick()
         --local runningAction = cc.RepeatForever:create(cc.Animate:create(animation2))
         player:stopActionByTag(tags.tagOfRun)
         player:runAction(jumpAction)
-        player:getPhysicsBody():setVelocity(cc.p(0, tapV*1.2))
+        player:getPhysicsBody():setVelocity(cc.p(0, tapV*0.9))
         jumping = true
     end
      --ÖØÖÃ
@@ -66,11 +66,13 @@ function logicLayer()
 
                 if not ready then
                     ready = true
+                    doubleClicked = false
+                    firstClicked = false
                     start_button:runAction(cc.FadeOut:create(0.1))
                     --player:getPhysicsBody():setEnable(true)
 
 --                    local enemy = CreateEnemy(layer)
-                    layer = CreateOpponents(layer)
+                   layer = CreateOpponents(layer)
                     local function step(delt)
                         meter  = meter + delt
                         StatusLayer.setMeter(meter)
@@ -82,7 +84,8 @@ function logicLayer()
                     layer:scheduleUpdateWithPriorityLua(step,0)
                 else
                     if not jumping then
-                        clickLogic()
+                       -- clickLogic()
+                       oneClick()
                     end
                 end
             end
@@ -106,13 +109,15 @@ function logicLayer()
                     sched:unscheduleScriptEntry(createOpponentSchid)
                 end
                 if spriteA:getTag() == tags.tagOfLayDown and spriteB:getTag()== tags.tagOfPlayer then
-                    meter = 0
+                    
                     cc.Director:getInstance():replaceScene(failedScene.create())
+                    meter = 0
                    sched:unscheduleScriptEntry(createOpponentSchid)
                 end
                if spriteA:getTag() == tags.tagOfPlayer and spriteB:getTag()== tags.tagOfLayDown then
-                    meter = 0
+                    
                     cc.Director:getInstance():replaceScene(failedScene.create())
+                    meter = 0
                     sched:unscheduleScriptEntry(createOpponentSchid)
                 end
                 
